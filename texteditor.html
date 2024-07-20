@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Text Editor</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+        }
+
+        .editor-container {
+            background: white;
+            border: 2px solid #ff6f61;
+            border-radius: 10px;
+            padding: 20px;
+            width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: visible;
+        }
+
+        #editor {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #f3f3f3;
+            white-space: pre-wrap; /* Preserve whitespace */
+        }
+
+        .toolbar {
+            position: absolute;
+            top: -50px; /* Adjust this value as needed */
+            right: 10px;
+            z-index: 10; /* Ensure it is above other elements */
+            display: flex;
+        }
+
+        .toolbar select, .toolbar button {
+            padding: 10px 20px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            background: linear-gradient(135deg, #00b4d8, #90e0ef); /* Blue-green gradient */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar button:hover, .toolbar select:hover {
+            background: linear-gradient(135deg, #0096c7, #48cae4); /* Darker blue-green gradient */
+        }
+
+        .toolbar button:focus, .toolbar select:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 180, 216, 0.8);
+        }
+
+        .toolbar select {
+            padding: 10px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="editor-container">
+        <div class="toolbar">
+            <button onclick="applyStyle('bold')">Bold</button>
+            <button onclick="applyStyle('italic')">Italic</button>
+            <button onclick="applyStyle('underline')">Underline</button>
+            <select id="fontSelect" onchange="changeFont(this.value)">
+                <option value="Arial" selected>Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Comic Sans MS">Comic Sans MS</option>
+                <option value="Impact">Impact</option>
+                <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                <option value="Palatino Linotype">Palatino Linotype</option>
+                <option value="Segoe UI">Segoe UI</option>
+            </select>
+        </div>
+        <div id="editor" contenteditable="true" placeholder="Start typing..."></div>
+    </div>
+    <script>
+        function applyStyle(style) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+            const selectedText = range.toString();
+
+            let newNode;
+            switch (style) {
+                case 'bold':
+                    newNode = document.createElement('b');
+                    break;
+                case 'italic':
+                    newNode = document.createElement('i');
+                    break;
+                case 'underline':
+                    newNode = document.createElement('u');
+                    break;
+                default:
+                    return;
+            }
+
+            newNode.textContent = selectedText;
+            range.deleteContents();
+            range.insertNode(newNode);
+        }
+
+        function changeFont(font) {
+            document.getElementById('editor').style.fontFamily = font;
+        }
+
+        document.getElementById('editor').addEventListener('input', function() {
+            console.log(this.innerHTML);
+        });
+    </script>
+</body>
+</html>
